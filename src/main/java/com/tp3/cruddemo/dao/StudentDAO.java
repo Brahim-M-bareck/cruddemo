@@ -13,4 +13,6 @@ public interface StudentDAO {
     List<Student> findAll();
 
     List<Student> findAllOrderByLastNameDesc();
+
+    List<Student> findByLastName(String theLastName);
 }

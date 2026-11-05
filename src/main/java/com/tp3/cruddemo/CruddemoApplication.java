@@ -25,6 +25,7 @@ public class CruddemoApplication {
             switch (action) {
                 case "create" -> createStudents(studentDAO);
                 case "read" -> readStudent(studentDAO);
+                case "bylastname" -> findStudentsByLastName(studentDAO);
                 default -> System.out.println("Action inconnue: " + action);
             }
         };
@@ -58,6 +59,18 @@ public class CruddemoApplication {
 
         System.out.println("All students (ORDER BY lastName):");
         for (Student student : students) {
+            System.out.println(student);
+        }
+
+        System.out.println("Students with lastName 'Doe':");
+        for (Student student : studentDAO.findByLastName("Doe")) {
+            System.out.println(student);
+        }
+    }
+
+    private void findStudentsByLastName(StudentDAO studentDAO) {
+        System.out.println("Students with lastName 'Doe':");
+        for (Student student : studentDAO.findByLastName("Doe")) {
             System.out.println(student);
         }
     }
