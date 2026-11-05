@@ -1,0 +1,25 @@
+=== TP 03 - cruddemo ===
+Action      : update
+Commande    : ./mvnw -q spring-boot:run -Dspring-boot.run.arguments=update
+Date        : 2026-11-05T21:48:57+00:00
+
+=== Sortie console (application + logs Hibernate) ===
+2026-11-05T21:49:02.306Z DEBUG 83854 --- [           main] org.hibernate.SQL                        : select s1_0.id,s1_0.email,s1_0.first_name,s1_0.last_name from student s1_0 order by s1_0.last_name
+2026-11-05T21:49:02.334Z DEBUG 83854 --- [           main] org.hibernate.SQL                        : select s1_0.id,s1_0.email,s1_0.first_name,s1_0.last_name from student s1_0 where s1_0.id=?
+2026-11-05T21:49:02.335Z TRACE 83854 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:INTEGER) <- [1]
+2026-11-05T21:49:02.344Z DEBUG 83854 --- [           main] org.hibernate.SQL                        : update student set email=?,first_name=?,last_name=? where id=?
+2026-11-05T21:49:02.346Z TRACE 83854 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [paul@test.com]
+2026-11-05T21:49:02.346Z TRACE 83854 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [John]
+2026-11-05T21:49:02.346Z TRACE 83854 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Doe]
+2026-11-05T21:49:02.346Z TRACE 83854 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (4:INTEGER) <- [1]
+2026-11-05T21:49:02.355Z DEBUG 83854 --- [           main] org.hibernate.SQL                        : select s1_0.id,s1_0.email,s1_0.first_name,s1_0.last_name from student s1_0 where s1_0.id=?
+2026-11-05T21:49:02.356Z TRACE 83854 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:INTEGER) <- [1]
+Updated student: Student{id=1, firstName='John', lastName='Doe', email='paul@test.com'}
+
+=== Code de sortie : 0 ===
+
+=== Etat de la table student apres l'action ===
+id	first_name	last_name	email
+1	John	Doe	paul@test.com
+2	Mary	Public	mary@test.com
+3	Susan	Doe	susan@test.com

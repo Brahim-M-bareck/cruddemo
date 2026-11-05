@@ -67,6 +67,7 @@ public class StudentDAOImpl implements StudentDAO {
     @Override
     @Transactional
     public boolean delete(Integer id) {
+        // remove() requires a managed entity, so load it in this same transaction
         Student theStudent = entityManager.find(Student.class, id);
         if (theStudent == null) {
             return false;

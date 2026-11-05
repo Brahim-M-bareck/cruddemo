@@ -1,0 +1,33 @@
+=== TP 03 - cruddemo ===
+Action      : service
+Commande    : ./mvnw -q spring-boot:run -Dspring-boot.run.arguments=service
+Date        : 2026-11-05T21:49:18+00:00
+
+=== Sortie console (application + logs Hibernate) ===
+2026-11-05T21:49:24.491Z DEBUG 85069 --- [           main] org.hibernate.SQL                        : insert into student (email,first_name,last_name) values (?,?,?)
+2026-11-05T21:49:24.497Z TRACE 85069 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [alice@service.com]
+2026-11-05T21:49:24.497Z TRACE 85069 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Alice]
+2026-11-05T21:49:24.497Z TRACE 85069 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Service]
+2026-11-05T21:49:24.509Z DEBUG 85069 --- [           main] org.hibernate.SQL                        : insert into student (email,first_name,last_name) values (?,?,?)
+2026-11-05T21:49:24.510Z TRACE 85069 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [bob@service.com]
+2026-11-05T21:49:24.510Z TRACE 85069 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Bob]
+2026-11-05T21:49:24.510Z TRACE 85069 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Service]
+2026-11-05T21:49:24.520Z DEBUG 85069 --- [           main] org.hibernate.SQL                        : update student set email=?,first_name=?,last_name=? where id=?
+2026-11-05T21:49:24.520Z TRACE 85069 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [bob@service.com]
+2026-11-05T21:49:24.521Z TRACE 85069 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (2:VARCHAR) <- [Bobby]
+2026-11-05T21:49:24.521Z TRACE 85069 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (3:VARCHAR) <- [Service]
+2026-11-05T21:49:24.521Z TRACE 85069 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (4:INTEGER) <- [5]
+Created via service: Student{id=4, firstName='Alice', lastName='Service', email='alice@service.com'}
+Created via service: Student{id=5, firstName='Bobby', lastName='Service', email='bob@service.com'}
+2026-11-05T21:49:24.540Z DEBUG 85069 --- [           main] org.hibernate.SQL                        : select s1_0.id,s1_0.email,s1_0.first_name,s1_0.last_name from student s1_0 where s1_0.id=?
+2026-11-05T21:49:24.541Z TRACE 85069 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:INTEGER) <- [5]
+Updated via service: Student{id=5, firstName='Bobby', lastName='Service', email='bob@service.com'}
+
+=== Code de sortie : 0 ===
+
+=== Etat de la table student apres l'action ===
+id	first_name	last_name	email
+2	Mary	Public	mary@test.com
+3	Susan	Doe	unknown@test.com
+4	Alice	Service	alice@service.com
+5	Bobby	Service	bob@service.com

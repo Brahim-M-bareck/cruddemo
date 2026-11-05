@@ -1,0 +1,12 @@
+=== TP 03 - cruddemo ===
+Action      : deleteall
+Commande    : ./mvnw -q spring-boot:run -Dspring-boot.run.arguments=deleteall
+Date        : 2026-11-05T21:49:24+00:00
+
+=== Sortie console (application + logs Hibernate) ===
+2026-11-05T21:49:30.081Z DEBUG 85410 --- [           main] org.hibernate.SQL                        : delete s1_0 from student s1_0
+Deleted row count: 4
+
+=== Code de sortie : 0 ===
+
+=== Etat de la table student apres l'action ===

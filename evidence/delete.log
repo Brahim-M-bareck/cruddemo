@@ -1,0 +1,25 @@
+=== TP 03 - cruddemo ===
+Action      : delete
+Commande    : ./mvnw -q spring-boot:run -Dspring-boot.run.arguments=delete
+Date        : 2026-11-05T21:49:13+00:00
+
+=== Sortie console (application + logs Hibernate) ===
+2026-11-05T21:49:18.668Z DEBUG 84777 --- [           main] org.hibernate.SQL                        : select s1_0.id,s1_0.email,s1_0.first_name,s1_0.last_name from student s1_0 order by s1_0.last_name
+2026-11-05T21:49:18.704Z DEBUG 84777 --- [           main] org.hibernate.SQL                        : select s1_0.id,s1_0.email,s1_0.first_name,s1_0.last_name from student s1_0 where s1_0.id=?
+2026-11-05T21:49:18.705Z TRACE 84777 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:INTEGER) <- [1]
+2026-11-05T21:49:18.717Z DEBUG 84777 --- [           main] org.hibernate.SQL                        : delete from student where id=?
+2026-11-05T21:49:18.717Z TRACE 84777 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:INTEGER) <- [1]
+Deleted student with id 1: true
+2026-11-05T21:49:18.724Z DEBUG 84777 --- [           main] org.hibernate.SQL                        : select s1_0.id,s1_0.email,s1_0.first_name,s1_0.last_name from student s1_0 where s1_0.id=?
+2026-11-05T21:49:18.725Z TRACE 84777 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:INTEGER) <- [1]
+After delete, findById(1) = null
+2026-11-05T21:49:18.726Z DEBUG 84777 --- [           main] org.hibernate.SQL                        : select s1_0.id,s1_0.email,s1_0.first_name,s1_0.last_name from student s1_0 where s1_0.id=?
+2026-11-05T21:49:18.727Z TRACE 84777 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:INTEGER) <- [9999]
+delete(9999) -> false (no student with this id, nothing deleted)
+
+=== Code de sortie : 0 ===
+
+=== Etat de la table student apres l'action ===
+id	first_name	last_name	email
+2	Mary	Public	mary@test.com
+3	Susan	Doe	unknown@test.com

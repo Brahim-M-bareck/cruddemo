@@ -105,6 +105,14 @@ Essai de ddl-auto=update
   Il reste neanmoins risqué en production car il applique des modifications
   implicites et non tracees.
 
+Essai de ddl-auto=create-drop
+-----------------------------
+- Au demarrage, Hibernate a emis `drop table if exists student` puis
+  `create table student (...)`.
+- A l'arret de l'application, le shutdown hook a emis de nouveau
+  `drop table if exists student` : la table n'existe plus apres l'arret.
+  Cette strategie est reservee aux tests sur base jetable.
+
 Restauration de l'etat final
 ----------------------------
 Apres les essais, la propriete a ete remise a :

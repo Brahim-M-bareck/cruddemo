@@ -1,0 +1,27 @@
+=== TP 03 - cruddemo ===
+Action      : read
+Commande    : ./mvnw -q spring-boot:run -Dspring-boot.run.arguments=read
+Date        : 2026-11-05T21:48:40+00:00
+
+=== Sortie console (application + logs Hibernate) ===
+2026-11-05T21:48:46.116Z DEBUG 82930 --- [           main] org.hibernate.SQL                        : select s1_0.id,s1_0.email,s1_0.first_name,s1_0.last_name from student s1_0 order by s1_0.last_name
+2026-11-05T21:48:46.147Z DEBUG 82930 --- [           main] org.hibernate.SQL                        : select s1_0.id,s1_0.email,s1_0.first_name,s1_0.last_name from student s1_0 where s1_0.id=?
+2026-11-05T21:48:46.148Z TRACE 82930 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:INTEGER) <- [1]
+First student (id 1) via findById: Student{id=1, firstName='Paul', lastName='Doe', email='paul@test.com'}
+All students (ORDER BY lastName):
+Student{id=1, firstName='Paul', lastName='Doe', email='paul@test.com'}
+Student{id=3, firstName='Susan', lastName='Doe', email='susan@test.com'}
+Student{id=2, firstName='Mary', lastName='Public', email='mary@test.com'}
+Students with lastName 'Doe':
+2026-11-05T21:48:46.154Z DEBUG 82930 --- [           main] org.hibernate.SQL                        : select s1_0.id,s1_0.email,s1_0.first_name,s1_0.last_name from student s1_0 where s1_0.last_name=?
+2026-11-05T21:48:46.155Z TRACE 82930 --- [           main] org.hibernate.orm.jdbc.bind              : binding parameter (1:VARCHAR) <- [Doe]
+Student{id=1, firstName='Paul', lastName='Doe', email='paul@test.com'}
+Student{id=3, firstName='Susan', lastName='Doe', email='susan@test.com'}
+
+=== Code de sortie : 0 ===
+
+=== Etat de la table student apres l'action ===
+id	first_name	last_name	email
+1	Paul	Doe	paul@test.com
+2	Mary	Public	mary@test.com
+3	Susan	Doe	susan@test.com
