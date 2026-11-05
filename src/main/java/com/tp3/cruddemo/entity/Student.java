@@ -5,10 +5,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 
 @Entity
 @Table(name = "student")
+@NamedQuery(name = "Student.findByLastName", query = "FROM Student WHERE lastName = :theData")
 public class Student {
 
     @Id
