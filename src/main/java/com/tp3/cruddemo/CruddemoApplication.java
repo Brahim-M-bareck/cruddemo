@@ -8,6 +8,8 @@ import org.springframework.context.annotation.Bean;
 import com.tp3.cruddemo.dao.StudentDAO;
 import com.tp3.cruddemo.entity.Student;
 
+import java.util.List;
+
 @SpringBootApplication
 public class CruddemoApplication {
 
@@ -44,7 +46,19 @@ public class CruddemoApplication {
     }
 
     private void readStudent(StudentDAO studentDAO) {
-        Student student = studentDAO.findById(1);
-        System.out.println("Found student: " + student);
+        List<Student> students = studentDAO.findAll();
+        if (students.isEmpty()) {
+            System.out.println("No students found. Run the create action first.");
+            return;
+        }
+
+        Student first = students.get(0);
+        System.out.println("First student (id " + first.getId() + ") via findById: "
+                + studentDAO.findById(first.getId()));
+
+        System.out.println("All students (ORDER BY lastName):");
+        for (Student student : students) {
+            System.out.println(student);
+        }
     }
 }
