@@ -26,6 +26,7 @@ public class CruddemoApplication {
                 case "create" -> createStudents(studentDAO);
                 case "read" -> readStudent(studentDAO);
                 case "bylastname" -> findStudentsByLastName(studentDAO);
+                case "update" -> updateStudent(studentDAO);
                 default -> System.out.println("Action inconnue: " + action);
             }
         };
@@ -73,5 +74,19 @@ public class CruddemoApplication {
         for (Student student : studentDAO.findByLastName("Doe")) {
             System.out.println(student);
         }
+    }
+
+    private void updateStudent(StudentDAO studentDAO) {
+        List<Student> students = studentDAO.findAll();
+        if (students.isEmpty()) {
+            System.out.println("No students found. Run the create action first.");
+            return;
+        }
+
+        Student student = students.get(0);
+        student.setFirstName("John");
+        studentDAO.update(student);
+
+        System.out.println("Updated student: " + studentDAO.findById(student.getId()));
     }
 }
