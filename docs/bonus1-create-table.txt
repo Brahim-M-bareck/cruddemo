@@ -1,0 +1,126 @@
+BONUS 1 - Generation du schema par Hibernate
+=============================================
+
+Objectif
+--------
+Comparer le script SQL du TP (table creee manuellement) avec le schema genere
+automatiquement par Hibernate lorsque spring.jpa.hibernate.ddl-auto vaut
+create/update.
+
+Sauvegarde prealable
+--------------------
+Les donnees de test ont ete sauvegardees avant toute manipulation :
+
+    mysqldump -u springstudent -pspringstudent student_tracker student \
+        > evidence/bonus1-backup.sql
+
+La table a ensuite ete supprimee pour laisser Hibernate la recreer.
+
+Commande utilisee pour la generation
+-----------------------------------
+    # spring.jpa.hibernate.ddl-auto=create
+    ./mvnw spring-boot:run -Dspring-boot.run.arguments=read
+
+Le log complet de cette execution est conserve dans /tmp/bonus1-create.log
+sur la machine de developpement ; les lignes DDL pertinentes sont recopiees
+ci-dessous.
+
+DDL genere par Hibernate (extrait exact des logs)
+-------------------------------------------------
+    2026-11-05T21:45:10.814Z DEBUG 78216 --- [           main] org.hibernate.SQL : drop table if exists student
+    2026-11-05T21:45:10.839Z DEBUG 78216 --- [           main] org.hibernate.SQL : create table student (id integer not null auto_increment, email varchar(255), first_name varchar(255), last_name varchar(255), primary key (id)) engine=InnoDB
+
+Schema resultant (mysql> SHOW CREATE TABLE student)
+---------------------------------------------------
+    CREATE TABLE `student` (
+      `id` int NOT NULL AUTO_INCREMENT,
+      `email` varchar(255) DEFAULT NULL,
+      `first_name` varchar(255) DEFAULT NULL,
+      `last_name` varchar(255) DEFAULT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci
+
+Script SQL original du TP
+-------------------------
+    CREATE TABLE student (
+        id         INT NOT NULL AUTO_INCREMENT,
+        first_name VARCHAR(45) DEFAULT NULL,
+        last_name  VARCHAR(45) DEFAULT NULL,
+        email      VARCHAR(45) DEFAULT NULL,
+        PRIMARY KEY (id)
+    ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
+
+Comparaison
+-----------
++----------------+-------------------------------+-------------------------------+
+| Element        | Script du TP                  | Schema Hibernate              |
++----------------+-------------------------------+-------------------------------+
+| id             | INT AUTO_INCREMENT, PK        | integer AUTO_INCREMENT, PK    |
+| first_name     | VARCHAR(45)                   | VARCHAR(255)                  |
+| last_name      | VARCHAR(45)                   | VARCHAR(255)                  |
+| email          | VARCHAR(45)                   | VARCHAR(255)                  |
+| Ordre colonnes | id, first_name, last_name,    | id, email, first_name,        |
+|                | email                         | last_name                     |
+| Moteur         | InnoDB                        | InnoDB                        |
+| Encodage       | utf8mb4                       | utf8mb4                       |
+| Nullabilite    | DEFAULT NULL                  | DEFAULT NULL (colonnes        |
+|                |                               | nullables)                    |
+| Cle primaire   | PRIMARY KEY (id)              | PRIMARY KEY (id)              |
++----------------+-------------------------------+-------------------------------+
+
+Observations
+------------
+1. Le type de l'identifiant est equivalent : Hibernate traduit `integer` en
+   `int` MySQL, avec `AUTO_INCREMENT` et cle primaire.
+2. La difference principale concerne la taille des chaines : le script impose
+   VARCHAR(45), alors qu'Hibernate utilise VARCHAR(255) par defaut car aucune
+   longueur n'est declaree dans @Column. Pour obtenir exactement VARCHAR(45),
+   il faudrait ecrire @Column(name = "first_name", length = 45), etc.
+3. L'ordre des colonnes differe (Hibernate place email avant first_name), ce
+   qui n'a aucune incidence fonctionnelle puisque les requetes sont generees
+   par mapping de champs.
+4. Hibernate ne cree ni la base ni l'utilisateur MySQL : ddl-auto ne concerne
+   que les tables. Les lignes CREATE USER / GRANT du script restent donc
+   indispensables.
+5. Avec ddl-auto=create, Hibernate execute `drop table if exists student`
+   a chaque demarrage : toutes les donnees sont perdues. C'est acceptable en
+   TP, jamais en production.
+
+Essai de ddl-auto=validate
+--------------------------
+- Sur le schema genere par Hibernate (types compatibles), l'application
+  demarre normalement : aucun DDL n'est emis et aucune erreur n'apparait.
+- Sur une table absente, le demarrage echoue volontairement avec :
+
+    SchemaManagementException: Schema validation: missing table [student]
+
+  Validate ne modifie jamais la base ; il se contente de comparer le schema
+  attendu au schema reel et fait echouer le demarrage en cas d'ecart.
+
+Essai de ddl-auto=update
+------------------------
+- Sur un schema deja conforme, aucune instruction DDL n'est emise.
+- Sur une table absente, update la cree (sans `drop table`) avec les memes
+  colonnes VARCHAR(255) que create. Update ne supprime ni colonne ni donnee.
+  Il reste neanmoins risqué en production car il applique des modifications
+  implicites et non tracees.
+
+Restauration de l'etat final
+----------------------------
+Apres les essais, la propriete a ete remise a :
+
+    spring.jpa.hibernate.ddl-auto=none
+
+La table du TP a ete recreee a l'identique du script (VARCHAR(45)) :
+
+    DROP TABLE IF EXISTS student;
+    CREATE TABLE student (
+        id INT NOT NULL AUTO_INCREMENT,
+        first_name VARCHAR(45) DEFAULT NULL,
+        last_name VARCHAR(45) DEFAULT NULL,
+        email VARCHAR(45) DEFAULT NULL,
+        PRIMARY KEY (id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+Verification finale : SHOW CREATE TABLE student redonne bien des colonnes
+VARCHAR(45), et la table est vide (0 ligne) pour le passage final du TP.
