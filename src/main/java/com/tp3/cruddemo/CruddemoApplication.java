@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Bean;
 
 import com.tp3.cruddemo.dao.StudentDAO;
 import com.tp3.cruddemo.entity.Student;
+import com.tp3.cruddemo.service.StudentService;
 
 import java.util.List;
 
@@ -18,7 +19,7 @@ public class CruddemoApplication {
     }
 
     @Bean
-    public CommandLineRunner commandLineRunner(StudentDAO studentDAO) {
+    public CommandLineRunner commandLineRunner(StudentDAO studentDAO, StudentService studentService) {
         return args -> {
             String action = args.length > 0 ? args[0] : "read";
 
@@ -32,6 +33,7 @@ public class CruddemoApplication {
                 case "delete" -> deleteStudent(studentDAO);
                 case "deleteall" -> deleteAllStudents(studentDAO);
                 case "bulkupdate" -> bulkUpdateEmail(studentDAO);
+                case "service" -> runServiceScenario(studentService);
                 default -> System.out.println("Action inconnue: " + action);
             }
         };
@@ -138,5 +140,16 @@ public class CruddemoApplication {
     private void bulkUpdateEmail(StudentDAO studentDAO) {
         int updatedCount = studentDAO.updateEmailByLastName("unknown@test.com", "Doe");
         System.out.println("Rows updated by bulk update: " + updatedCount);
+    }
+
+    private void runServiceScenario(StudentService studentService) {
+        Student alice = new Student("Alice", "Service", "alice@service.com");
+        Student bob = new Student("Bob", "Service", "bob@service.com");
+
+        studentService.createTwoAndUpdateFirstName(alice, bob, "Bobby");
+
+        System.out.println("Created via service: " + alice);
+        System.out.println("Created via service: " + bob);
+        System.out.println("Updated via service: " + studentService.findById(bob.getId()));
     }
 }
