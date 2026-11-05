@@ -28,6 +28,8 @@ public class CruddemoApplication {
                 case "bylastname" -> findStudentsByLastName(studentDAO);
                 case "update" -> updateStudent(studentDAO);
                 case "delete" -> deleteStudent(studentDAO);
+                case "deleteall" -> deleteAllStudents(studentDAO);
+                case "bulkupdate" -> bulkUpdateEmail(studentDAO);
                 default -> System.out.println("Action inconnue: " + action);
             }
         };
@@ -105,5 +107,15 @@ public class CruddemoApplication {
 
         boolean deletedMissing = studentDAO.delete(9999);
         System.out.println("delete(9999) -> " + deletedMissing + " (no student with this id, nothing deleted)");
+    }
+
+    private void deleteAllStudents(StudentDAO studentDAO) {
+        int deletedCount = studentDAO.deleteAll();
+        System.out.println("Deleted row count: " + deletedCount);
+    }
+
+    private void bulkUpdateEmail(StudentDAO studentDAO) {
+        int updatedCount = studentDAO.updateEmailByLastName("unknown@test.com", "Doe");
+        System.out.println("Rows updated by bulk update: " + updatedCount);
     }
 }

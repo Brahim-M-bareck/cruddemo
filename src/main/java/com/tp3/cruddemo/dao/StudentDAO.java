@@ -19,4 +19,8 @@ public interface StudentDAO {
     void update(Student theStudent);
 
     boolean delete(Integer id);
+
+    int deleteAll();
+
+    int updateEmailByLastName(String email, String lastName);
 }
