@@ -22,6 +22,7 @@ public class CruddemoApplication {
 
             switch (action) {
                 case "create" -> createStudents(studentDAO);
+                case "read" -> readStudent(studentDAO);
                 default -> System.out.println("Action inconnue: " + action);
             }
         };
@@ -40,5 +41,10 @@ public class CruddemoApplication {
 
         studentDAO.save(susan);
         System.out.println("Saved student. Generated id: " + susan.getId());
+    }
+
+    private void readStudent(StudentDAO studentDAO) {
+        Student student = studentDAO.findById(1);
+        System.out.println("Found student: " + student);
     }
 }
