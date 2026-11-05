@@ -26,6 +26,7 @@ public class CruddemoApplication {
                 case "create" -> createStudents(studentDAO);
                 case "read" -> readStudent(studentDAO);
                 case "bylastname" -> findStudentsByLastName(studentDAO);
+                case "findall" -> findAllStudents(studentDAO);
                 case "update" -> updateStudent(studentDAO);
                 case "delete" -> deleteStudent(studentDAO);
                 case "deleteall" -> deleteAllStudents(studentDAO);
@@ -75,6 +76,18 @@ public class CruddemoApplication {
     private void findStudentsByLastName(StudentDAO studentDAO) {
         System.out.println("Students with lastName 'Doe':");
         for (Student student : studentDAO.findByLastName("Doe")) {
+            System.out.println(student);
+        }
+    }
+
+    private void findAllStudents(StudentDAO studentDAO) {
+        System.out.println("All students (ORDER BY lastName ASC):");
+        for (Student student : studentDAO.findAll()) {
+            System.out.println(student);
+        }
+
+        System.out.println("All students (ORDER BY lastName DESC):");
+        for (Student student : studentDAO.findAllOrderByLastNameDesc()) {
             System.out.println(student);
         }
     }
