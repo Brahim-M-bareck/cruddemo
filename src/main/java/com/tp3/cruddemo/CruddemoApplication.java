@@ -27,6 +27,7 @@ public class CruddemoApplication {
                 case "read" -> readStudent(studentDAO);
                 case "bylastname" -> findStudentsByLastName(studentDAO);
                 case "update" -> updateStudent(studentDAO);
+                case "delete" -> deleteStudent(studentDAO);
                 default -> System.out.println("Action inconnue: " + action);
             }
         };
@@ -88,5 +89,21 @@ public class CruddemoApplication {
         studentDAO.update(student);
 
         System.out.println("Updated student: " + studentDAO.findById(student.getId()));
+    }
+
+    private void deleteStudent(StudentDAO studentDAO) {
+        List<Student> students = studentDAO.findAll();
+        if (students.isEmpty()) {
+            System.out.println("No students found. Run the create action first.");
+        } else {
+            Student student = students.get(0);
+            int id = student.getId();
+            boolean deleted = studentDAO.delete(id);
+            System.out.println("Deleted student with id " + id + ": " + deleted);
+            System.out.println("After delete, findById(" + id + ") = " + studentDAO.findById(id));
+        }
+
+        boolean deletedMissing = studentDAO.delete(9999);
+        System.out.println("delete(9999) -> " + deletedMissing + " (no student with this id, nothing deleted)");
     }
 }
