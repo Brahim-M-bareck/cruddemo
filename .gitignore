@@ -31,3 +31,23 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Local working notes / evidence (not part of the deliverables) ###
+/evidence/
+/GUIDE_CAPTURES.md
+/README.md
+
+### Logs ###
+*.log
+
+### OS files ###
+.DS_Store
+
+### Local backups / database dumps ###
+*.dump
+*.bak
+/*.sql
+/bonus1-backup.sql
+
+### Local placeholder (captures/ contains the screenshots) ###
+/captures/.gitkeep
